@@ -3,10 +3,18 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose")
 
 // Import API file
 const productRoutes = require("./api/routes/products");
 const orderRoutes = require("./api/routes/orders");
+
+// Connect Mongo
+mongoose.connect(
+  "mongodb+srv://node-learning:"
+   + process.env.password
+   + "@node-rest-shop.vp92z3t.mongodb.net/?retryWrites=true&w=majority"
+);
 
 // Use Morgan
 app.use(morgan("dev"));
