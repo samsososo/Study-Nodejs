@@ -12,14 +12,17 @@ const orderRoutes = require("./api/routes/orders");
 // Connect Mongo
 mongoose.connect(
   "mongodb+srv://node-learning:"
-   + process.env.password
-   + "@node-rest-shop.vp92z3t.mongodb.net/?retryWrites=true&w=majority"
+  + process.env.password
+  + "@node-rest-shop.vp92z3t.mongodb.net/?retryWrites=true&w=majority"
 );
 
 // Use Morgan
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false })); // true will mean pass the extend rich data
 app.use(bodyParser.json()); // extract json data
+
+// Upload file
+app.use('/uploads', express.static('uploads'));
 
 // CORS
 app.use((req, res, next) => {
@@ -29,8 +32,8 @@ app.use((req, res, next) => {
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
   if (req.method === "OPTIONS") {
-      res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
-      return res.status(200).json({});
+    res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+    return res.status(200).json({});
   }
   next();
 });
