@@ -6,7 +6,7 @@ const Product = require("../models/product");
 
 router.get("/", (req, res, next) => {
   Product.find()
-    .select("name price id")
+    .select("name price _id")
     .exec()
     .then(docs => {
       const response = {
@@ -15,7 +15,7 @@ router.get("/", (req, res, next) => {
           return {
             name: doc.name,
             price: doc.price,
-            id: doc.id
+            _id: doc._id
           };
         })
       };
@@ -31,7 +31,7 @@ router.get("/", (req, res, next) => {
 
 router.post("/", (req, res, next) => {
   const product = new Product({
-    id: new mongoose.Types.ObjectId(),
+    _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
     price: req.body.price
   });
@@ -42,9 +42,9 @@ router.post("/", (req, res, next) => {
       res.status(201).json({
         message: "Created product successfully",
         createdProduct: {
-            name: result.name,
-            price: result.price,
-            id: result.id
+          name: result.name,
+          price: result.price,
+          _id: result._id
         }
       });
     })
@@ -57,15 +57,15 @@ router.post("/", (req, res, next) => {
 });
 
 router.get("/:productId", (req, res, next) => {
-  const id = req.params.productId;
-  Product.findById(id)
-    .select('name price id')
+  const _id = req.params.productId;
+  Product.findById(_id)
+    .select('name price _id')
     .exec()
     .then(doc => {
       console.log("From database", doc);
       if (doc) {
         res.status(200).json({
-            product: doc
+          product: doc
         });
       } else {
         res
@@ -80,16 +80,16 @@ router.get("/:productId", (req, res, next) => {
 });
 
 router.patch("/:productId", (req, res, next) => {
-  const id = req.params.productId;
+  const _id = req.params.productId;
   const updateOps = {};
   for (const ops of req.body) {
     updateOps[ops.propName] = ops.value;
   }
-  Product.update({ id: id }, { $set: updateOps })
+  Product.update({ _id: _id }, { $set: updateOps })
     .exec()
     .then(result => {
       res.status(200).json({
-          message: 'Product updated'
+        message: 'Product updated'
       });
     })
     .catch(err => {
@@ -101,12 +101,12 @@ router.patch("/:productId", (req, res, next) => {
 });
 
 router.delete("/:productId", (req, res, next) => {
-  const id = req.params.productId;
-  Product.remove({ id: id })
+  const _id = req.params.productId;
+  Product.remove({ _id: _id })
     .exec()
     .then(result => {
       res.status(200).json({
-          message: 'Product deleted'
+        message: 'Product deleted'
       });
     })
     .catch(err => {
