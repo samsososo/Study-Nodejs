@@ -8,6 +8,7 @@ const mongoose = require("mongoose")
 // Import API file
 const productRoutes = require("./api/routes/products");
 const orderRoutes = require("./api/routes/orders");
+const userRoutes = require('./api/routes/user');
 
 // Connect Mongo
 mongoose.connect(
@@ -41,6 +42,7 @@ app.use((req, res, next) => {
 // Use Routes
 app.use("/products", productRoutes);
 app.use("/orders", orderRoutes);
+app.use("/user", userRoutes);
 
 app.use((request, response, next) => {
   const error = new Error("Not found");
